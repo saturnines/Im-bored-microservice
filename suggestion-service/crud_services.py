@@ -38,16 +38,14 @@ def delete_entry(category, title, description):
     cur.close()
     conn.close()
 
-def select_random_entry(category):
+def random_entry():
+    """get random entry"""
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute(
-        "SELECT * FROM suggestions WHERE category=%s ORDER BY RANDOM() LIMIT 1;",
-        (category,)
+        "SELECT category, title, description FROM suggestions ORDER BY RANDOM() LIMIT 1"
     )
-    # get result
-    suggestion = cur.fetchone()
+    entry = cur.fetchone()
     cur.close()
     conn.close()
-    return suggestion
+    return entry
