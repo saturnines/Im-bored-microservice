@@ -8,20 +8,13 @@ def create_db():
     try:
         cur.execute("""
             CREATE TABLE IF NOT EXISTS public.clients (
-                "Id" SERIAL PRIMARY KEY,
-                "ClientId" VARCHAR(128) NOT NULL,
-                "ClientSecret" BYTEA NOT NULL,
-                "IsAdmin" BOOLEAN NOT NULL DEFAULT FALSE,
-                CONSTRAINT "ClientId_unique" UNIQUE ("ClientId")
+                id SERIAL PRIMARY KEY,
+                username  VARCHAR(128) NOT NULL,
+                password BYTEA NOT NULL,
+                rank INT NOT NULL DEFAULT 0,
+                CONSTRAINT username_unique UNIQUE (username)
             );
         """)
-
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS public.blacklist (
-                "token" VARCHAR(256) NOT NULL
-            );
-        """)
-
         conn.commit()
     except psycopg2.DatabaseError as e:
         print("Database error:", e)
