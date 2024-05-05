@@ -1,6 +1,6 @@
 import psycopg2
 
-def create_db():
+def create_clients_table():
     """Creates a database for authenticating calls to suggestion-service api. """
     conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="admin", port=5432)
     cur = conn.cursor()
@@ -26,4 +26,4 @@ def create_db():
 
 
 if __name__ == "__main__":
-    create_db()
+    create_clients_table()
