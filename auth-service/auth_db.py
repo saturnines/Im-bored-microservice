@@ -1,5 +1,18 @@
 import psycopg2
 
+def table_connection():
+    """This connects to the DB."""
+    conn = psycopg2.connect(
+        host="localhost",
+        dbname="postgres",
+        user="postgres",
+        password="admin",
+        port=5432
+    )
+    return conn
+
+
+
 def create_clients_table():
     """Creates a database for authenticating calls to suggestion-service api. """
     conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="admin", port=5432)
@@ -23,7 +36,39 @@ def create_clients_table():
         cur.close()
         conn.close()
 
+def insert_user_cred(username, hashed_password):
+    conn = table_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            INSERT INTO public.clients (username, password) VALUES (%s, %s)
+        """, (username, hashed_password))
+        conn.commit()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        conn.rollback()
+    finally:
+        cur.close()
+        conn.close()
+
+
+def delete_user_cred(username):
+    conn = table_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            DELETE FROM public.clients WHERE username = %s
+        """, (username,))
+        conn.commit()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        conn.rollback()
+    finally:
+        cur.close()
+        conn.close()
 
 
 if __name__ == "__main__":
     create_clients_table()
+
+
