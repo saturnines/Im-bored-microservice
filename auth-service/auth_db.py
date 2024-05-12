@@ -21,7 +21,6 @@ def create_clients_table():
     try:
         cur.execute("""
             CREATE TABLE IF NOT EXISTS public.clients (
-                id SERIAL PRIMARY KEY,
                 username  VARCHAR(128) NOT NULL,
                 password BYTEA NOT NULL,
                 rank INT NOT NULL DEFAULT 0,
@@ -67,8 +66,22 @@ def delete_user_cred(username):
         cur.close()
         conn.close()
 
+def get_user_info(username):
+    conn = table_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT username, password, rank FROM public.clients WHERE username = %s", (username,))
+        user_info = cur.fetchone()
+        return user_info
+    except Exception as e:
+        print(f"Error fetching user info: {e}")
+        conn.rollback()
+        return None # Not found
+    finally:
+        cur.close()
+        conn.close()
+
 
 if __name__ == "__main__":
     create_clients_table()
-
 

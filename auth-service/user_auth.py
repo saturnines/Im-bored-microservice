@@ -3,8 +3,9 @@ from flask import Flask, request, jsonify, make_response, render_template, sessi
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-
-
+from passwordhash import hash_password, verify_password
+from auth_db import insert_user_cred,delete_user_cred, get_user_info
+from flask import Response
 
 
 
@@ -13,9 +14,27 @@ auth_service.config['SECRET_KEY'] = '5f4102db508e4065ace3df7ae799f6cf'  # I supp
 
 
 # Login and Reg Part:
+@auth_service.route('/register', methods=['POST'])
+def register():
+    username = request.json.get('username')
+    password = request.json.get('password')
 
+    if not username or password:
+        return jsonify({'error': 'Missing username or password'}), 400
+    try:
+        hashed_password = hash_password(password)
+        insert_user_cred(username, hashed_password)
+        return jsonify({'message': 'User registered successfully'}), 201
+     except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
+@auth_service.route()
+def log_in():
+    username = request.json.get('username')
+    password = request.json.get('password')
 
+    if not username or password:
+        return jsonify({'error': 'Missing username or password'}), 400
 
 
 
