@@ -35,13 +35,13 @@ def create_clients_table():
         cur.close()
         conn.close()
 
-def insert_user_cred(username, hashed_password):
+def insert_user_cred(username, hashed_password, rank=1):
     conn = table_connection()
     cur = conn.cursor()
     try:
         cur.execute("""
-            INSERT INTO public.clients (username, password) VALUES (%s, %s)
-        """, (username, hashed_password))
+            INSERT INTO public.clients (username, password, rank) VALUES (%s, %s, %s)
+        """, (username, hashed_password, rank))
         conn.commit()
     except Exception as e:
         print(f"An error occurred: {e}")
