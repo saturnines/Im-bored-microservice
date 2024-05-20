@@ -2,13 +2,12 @@ import sys
 import os
 from flask import Flask, request, jsonify
 import requests
+from suggestion_service import crud_services
 import jwt
 from functools import wraps
 
 sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")
-import suggestion-service
-print(sys.path)
-print(suggestion-service)
+
 
 
 
