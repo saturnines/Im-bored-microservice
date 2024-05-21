@@ -84,3 +84,40 @@ response = requests.get(f"{API_GATEWAY_URL}/get_suggestion")
 print(response.json())
 ```
 
+
+### Example Responses 
+```python
+Registering a new user...
+Raw Register Response: {
+  "message": "User registered successfully"
+}
+
+Register Response: {'message': 'User registered successfully'}
+Logging in with the registered user...
+Raw Login Response: {
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdHVzZXIiLCJyYW5rIjoxLCJleHAiOjE3MTYzMTc1NjJ9.8Nrl34tED0Y2LUoEmUCp4N8teyMqnR5pEgLn4z53TZ0"
+}
+
+Login Response: {'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdHVzZXIiLCJyYW5rIjoxLCJleHAiOjE3MTYzMTc1NjJ9.8Nrl34tED0Y2LUoEmUCp4N8teyMqnR5pEgLn4z53TZ0'}
+Creating a new suggestion...
+Raw Create Suggestion Response: {
+  "message": "Suggestion added successfully"
+}
+
+Create Suggestion Response: {'message': 'Suggestion added successfully'}
+Getting a random suggestion...
+Raw Get Suggestion Response: {
+  "category": "Test Category",
+  "description": "Test Description",
+  "title": "Test Title"
+}
+
+Get Suggestion Response: {'category': 'Test Category', 'description': 'Test Description', 'title': 'Test Title'}
+Deleting the created suggestion...
+Raw Delete Suggestion Response: {
+  "error": "Access denied!"
+}
+
+Delete Suggestion Response: {'error': 'Access denied!'}
+```
+
