@@ -1,5 +1,7 @@
 import sys
+
 from crud_services import create_entry, delete_entry, random_entry
+
 
 def main_menu():
     print("\nWelcome to the Random things to do!")
