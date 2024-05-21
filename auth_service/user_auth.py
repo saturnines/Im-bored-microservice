@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-from passwordhash import hash_password, verify_password
-from auth_db import insert_user_cred, get_user_info
+from auth_service import passwordhash, auth_db, auth_user
+
 
 auth_service = Flask(__name__)
 auth_service.config['SECRET_KEY'] = '5f4102db508e4065ace3df7ae799f6cf'  # Secret key for JWT
