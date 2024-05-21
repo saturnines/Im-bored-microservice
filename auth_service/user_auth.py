@@ -2,8 +2,9 @@ from flask import Flask, request, jsonify
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-from auth_service import passwordhash, auth_db, auth_user
-
+from auth_service import passwordhash, auth_db
+from auth_service.auth_db import get_user_info, insert_user_cred
+from auth_service.passwordhash import verify_password, hash_password
 
 auth_service = Flask(__name__)
 auth_service.config['SECRET_KEY'] = '5f4102db508e4065ace3df7ae799f6cf'  # Secret key for JWT
@@ -83,4 +84,4 @@ def protected_route(payload):
     return jsonify({'message': 'This is a protected route', 'user': payload['user'], 'rank': payload['rank']})
 
 if __name__ == '__main__':
-    auth_service.run(debug=True)
+    auth_service.run(debug=True, port=5001)

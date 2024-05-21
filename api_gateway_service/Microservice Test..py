@@ -2,7 +2,6 @@ import requests
 
 API_GATEWAY_URL = 'http://127.0.0.1:5000'
 
-
 def register_user(username, password):
     url = f"{API_GATEWAY_URL}/register-user"
     data = {
@@ -10,8 +9,12 @@ def register_user(username, password):
         "password": password
     }
     response = requests.post(url, json=data)
-    print(f"Register Response: {response.json()}")
-
+    print(f"Raw Register Response: {response.text}")
+    try:
+        response_json = response.json()
+        print(f"Register Response: {response_json}")
+    except requests.exceptions.JSONDecodeError:
+        print("Failed to decode JSON response")
 
 def login_user(username, password):
     url = f"{API_GATEWAY_URL}/login"
@@ -20,9 +23,14 @@ def login_user(username, password):
         "password": password
     }
     response = requests.post(url, json=data)
-    print(f"Login Response: {response.json()}")
-    return response.json().get('token')
-
+    print(f"Raw Login Response: {response.text}")
+    try:
+        response_json = response.json()
+        print(f"Login Response: {response_json}")
+        return response_json.get('token')
+    except requests.exceptions.JSONDecodeError:
+        print("Failed to decode JSON response")
+        return None
 
 def create_suggestion(token, category, title, description):
     url = f"{API_GATEWAY_URL}/create_entry"
@@ -35,14 +43,22 @@ def create_suggestion(token, category, title, description):
         "description": description
     }
     response = requests.put(url, json=data, headers=headers)
-    print(f"Create Suggestion Response: {response.json()}")
-
+    print(f"Raw Create Suggestion Response: {response.text}")  # Print raw response
+    try:
+        response_json = response.json()
+        print(f"Create Suggestion Response: {response_json}")
+    except requests.exceptions.JSONDecodeError:
+        print("Failed to decode JSON response")
 
 def get_suggestion():
     url = f"{API_GATEWAY_URL}/get_suggestion"
     response = requests.get(url)
-    print(f"Get Suggestion Response: {response.json()}")
-
+    print(f"Raw Get Suggestion Response: {response.text}")
+    try:
+        response_json = response.json()
+        print(f"Get Suggestion Response: {response_json}")
+    except requests.exceptions.JSONDecodeError:
+        print("Failed to decode JSON response")
 
 def delete_suggestion(token, category, title, description):
     url = f"{API_GATEWAY_URL}/delete_entry"
@@ -55,22 +71,29 @@ def delete_suggestion(token, category, title, description):
         "description": description
     }
     response = requests.delete(url, json=data, headers=headers)
-    print(f"Delete Suggestion Response: {response.json()}")
-
+    print(f"Raw Delete Suggestion Response: {response.text}")
+    try:
+        response_json = response.json()
+        print(f"Delete Suggestion Response: {response_json}")
+    except requests.exceptions.JSONDecodeError:
+        print("Failed to decode JSON response")
 
 if __name__ == "__main__":
-    # Register a new user
+    print("Registering a new user...")
     register_user("testuser", "testpassword")
 
-    # Login with the registered user to get a token
+    print("Logging in with the registered user...")
     token = login_user("testuser", "testpassword")
 
     if token:
-        # Create a new suggestion
+        # Create new suggestion
+        print("Creating a new suggestion...")
         create_suggestion(token, "Test Category", "Test Title", "Test Description")
 
-        # Get a random suggestion
+        # Get random suggestion
+        print("Getting a random suggestion...")
         get_suggestion()
 
-        # Delete the created suggestion
+        # Delete created suggestion
+        print("Deleting the created suggestion...")
         delete_suggestion(token, "Test Category", "Test Title", "Test Description")
