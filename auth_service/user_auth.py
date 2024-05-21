@@ -76,7 +76,7 @@ def token_required(f):
         return f(payload, *args, **kwargs)
     return decorated
 
-# Test protected route
+# Test protected route # THE FOO ROUTE
 @auth_service.route('/protected', methods=['GET'])
 @token_required
 def protected_route(payload):
