@@ -8,7 +8,7 @@ from functools import wraps
 from auth_service import user_auth
 import bcrypt
 
-sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")
+sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")  # Change this for AWS.
 
 gateway_service = Flask(__name__)
 gateway_service.config['SECRET_KEY'] = '5f4102db508e4065ace3df7ae799f6cf'
