@@ -8,6 +8,12 @@ from functools import wraps
 from auth_service import user_auth
 import bcrypt
 
+#logging shit
+from logging_service import logger_sender
+logger = logger_sender.configure_logging('api_gateway',fluentd_host='fluentd', fluentd_port=24224)
+
+
+
 sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")  # Change this for AWS.
 
 gateway_service = Flask(__name__)
@@ -20,15 +26,19 @@ def token_required(allowed_roles):
         def wrapper(*args, **kwargs):
             token = request.headers.get('Authorization')
             if not token:
+                logger.info("Missing JWT Token.")
                 return jsonify({'Alert!': 'Token is missing!'}), 403
 
             try:
                 payload = jwt.decode(token.split(" ")[1], gateway_service.config['SECRET_KEY'], algorithms=['HS256'])
                 if payload['rank'] not in allowed_roles:
+                    logger.info("Tried to access wrong role/ No perms. ")
                     return jsonify({'error': 'Access denied!'}), 403
             except jwt.ExpiredSignatureError:
+                logger.info("Token expired.")
                 return jsonify({'Alert!': 'Token has expired!'}), 401
             except jwt.InvalidTokenError:
+                logger.info("Wrong/Invalid Token.")
                 return jsonify({'Alert!': 'Invalid Token!'}), 401
 
             return f(payload, *args, **kwargs)
@@ -44,12 +54,15 @@ def delete_suggestion():
     description = request.json.get('description')
 
     if not category or not title or not description:
+        logger.info("Unable to delete suggestion. Missing Category, title or description")
         return jsonify({'error': 'Missing category, title, or description!'}), 406
 
     try:
         crud_services.delete_entry(category, title, description)
+        logger.error(f"Api_Gateway: {category}, {title}, {description} when deleting. ")
         return jsonify({'message': 'Suggestion deleted successfully'}), 203
     except Exception as e:
+        logger.error(f"Api_Gateway: Exception of {e} when deleting suggestions")
         return jsonify({'error': str(e)}), 500
 
 @gateway_service.route('/create_entry', methods=['PUT'])
@@ -60,12 +73,15 @@ def create_entry(payload):
     description = request.json.get('description')
 
     if not category or not title or not description:
+        logger.info("Unable to create suggestion. Missing Category, title or description")
         return jsonify({'error': 'Missing category, title, or description!'}), 406
 
     try:
         crud_services.create_entry(category, title, description)
+        logger.error(f"Api_Gateway: {category}, {title}, {description} while creating. ")
         return jsonify({'message': 'Suggestion added successfully'}), 202
     except Exception as e:
+        logger.error(f"Api_Gateway: Exception of {e} when creating suggestions")
         return jsonify({'error': str(e)}), 500
 
 @gateway_service.route('/get_suggestion', methods=['GET'])
@@ -79,6 +95,7 @@ def get_suggestion():
                 'description': suggestion[2]
             })
         else:
+            logger.error(f"Api_gateway: No suggestion found")
             return jsonify({'error': 'No suggestions found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -90,13 +107,16 @@ def register():
     password = request.json.get('password')
 
     if not username or not password:
+        logger.warning("Register error, username or password missing")
         return jsonify({'error': 'Missing username or password'}), 400
 
     try:
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         user_auth.insert_user_cred(username, hashed_password)
+        logger.info(f"User successfully registered with the user {username}")
         return jsonify({'message': 'User registered successfully'}), 201
     except Exception as e:
+        logger.error(f"exception when trying to register {e}")
         return jsonify({'error': str(e)}), 500
 
 # Login Endpoint
@@ -106,6 +126,7 @@ def login():
     password = request.json.get('password')
 
     if not username or not password:
+        logger.warning("Login error, username or password missing")
         return jsonify({'error': 'Missing username or password'}), 400
 
     try:
@@ -117,10 +138,13 @@ def login():
                 'exp': datetime.utcnow() + timedelta(minutes=30)
             }
             token = jwt.encode(payload, gateway_service.config['SECRET_KEY'], algorithm='HS256')
+            logger.info("Login success, jwt token sent.")
             return jsonify({'token': token}), 200
         else:
+            logger.error("Login failed. Wrong password or username.")
             return jsonify({'error': 'Invalid username or password'}), 401
     except Exception as e:
+        logger.error(f"login failed {e} exception")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
