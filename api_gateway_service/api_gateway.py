@@ -8,10 +8,12 @@ from functools import wraps
 from auth_service import user_auth
 import bcrypt
 
-#logging shit
+#logging
 from logging_service import logger_sender
 logger = logger_sender.configure_logging('api_gateway',fluentd_host='fluentd', fluentd_port=24224)
 
+#Testing
+from testing_service import microservice_test
 
 
 sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")  # Change this for AWS.
@@ -146,6 +148,11 @@ def login():
     except Exception as e:
         logger.error(f"login failed {e} exception")
         return jsonify({'error': str(e)}), 500
+
+
+@gateway_service.route('/admin-test', methods=['GET'])
+
+
 
 if __name__ == '__main__':
     gateway_service.run(debug=True, port=5000)
