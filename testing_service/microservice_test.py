@@ -1,4 +1,3 @@
-import pytest
 import requests
 
 # Bad practice, change api_Gateway to something used prod.

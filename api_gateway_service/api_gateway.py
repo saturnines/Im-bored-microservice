@@ -1,6 +1,6 @@
 import sys
 from datetime import datetime, timedelta
-
+import requests
 from flask import Flask, request, jsonify
 from suggestion_service import crud_services
 import jwt
@@ -13,7 +13,7 @@ from logging_service import logger_sender
 logger = logger_sender.configure_logging('api_gateway',fluentd_host='fluentd', fluentd_port=24224)
 
 #Testing
-from testing_service import microservice_test
+from testing_service import testing_api, microservice_test
 
 
 sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")  # Change this for AWS.
@@ -150,7 +150,33 @@ def login():
         return jsonify({'error': str(e)}), 500
 
 
+TESTING_API_URL = 'http://127.0.0.1:5010'
+
 @gateway_service.route('/admin-test', methods=['GET'])
+def backend_test():
+    try:
+        response = requests.get(f"{TESTING_API_URL}/run-tests")
+        response.raise_for_status()
+        results = response.json()
+
+        logger.info(f"Backend Test Run. Results: {results}")
+
+        if response.status_code == 200:
+            return jsonify({'Success': 'Testing Works!'}), 200
+        elif response.status_code == 601:
+            return jsonify({'Error': 'Register Test Failed!'}), 601
+        elif response.status_code == 602:
+            return jsonify({'Error': 'Login User Test Failed!'}), 602
+        elif response.status_code == 603:
+            return jsonify({'Error': 'Creating entry Failed'}), 603
+        elif response.status_code == 604:
+            return jsonify({'Error': 'Getting suggestion Failed'}), 604
+        else:
+            return jsonify({'Error': 'Unknown error occurred!'}), response.status_code
+    except Exception as e:
+        logger.error(f"Test failed: {e} exception")
+        return jsonify({'error': str(e)}), 500
+
 
 
 
