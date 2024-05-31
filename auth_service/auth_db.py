@@ -1,20 +1,24 @@
 import psycopg2
-
-import sys
-sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")  # Change this for AWS.
 from logging_service import logger_sender
 logger = logger_sender.configure_logging('auth_service',fluentd_host='fluentd', fluentd_port=24224)
+from dotenv import load_dotenv
+import os
 
-
+load_dotenv()
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
 
 def table_connection():
     """This connects to the DB."""
     conn = psycopg2.connect(
-        host="localhost",
-        dbname="postgres",
-        user="postgres",
-        password="admin",
-        port=5432
+        host=os.getenv('DB_HOST'),
+        dbname=os.getenv('DB_NAME'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        port=os.getenv('DB_PORT')
     )
     return conn
 

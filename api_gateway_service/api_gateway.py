@@ -7,22 +7,26 @@ import jwt
 from functools import wraps
 from auth_service import user_auth
 import bcrypt
+import os
+from dotenv import load_dotenv
+
+
 
 #logging
 from logging_service import logger_sender
-logger = logger_sender.configure_logging('api_gateway',fluentd_host='fluentd', fluentd_port=24224)
 
-#Testing
-from testing_service import testing_api, microservice_test
+logger = logger_sender.configure_logging('api_gateway', fluentd_host='fluentd', fluentd_port=24224)
 
 
-sys.path.append(r"C:\Users\Kevin\Desktop\bored_microservice")  # Change this for AWS.
-
+load_dotenv()
+secret_key = os.getenv('SECRET_KEY')
 gateway_service = Flask(__name__)
-gateway_service.config['SECRET_KEY'] = '5f4102db508e4065ace3df7ae799f6cf'
+gateway_service.config['SECRET_KEY'] = secret_key
+
 
 def token_required(allowed_roles):
     """Check for JWT token and allowed roles."""
+
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -44,8 +48,11 @@ def token_required(allowed_roles):
                 return jsonify({'Alert!': 'Invalid Token!'}), 401
 
             return f(payload, *args, **kwargs)
+
         return wrapper
+
     return decorator
+
 
 # Suggestion Endpoints
 @gateway_service.route('/delete_entry', methods=['DELETE'])
@@ -67,6 +74,7 @@ def delete_suggestion():
         logger.error(f"Api_Gateway: Exception of {e} when deleting suggestions")
         return jsonify({'error': str(e)}), 500
 
+
 @gateway_service.route('/create_entry', methods=['PUT'])
 @token_required(allowed_roles=[1, 2])
 def create_entry(payload):
@@ -86,6 +94,7 @@ def create_entry(payload):
         logger.error(f"Api_Gateway: Exception of {e} when creating suggestions")
         return jsonify({'error': str(e)}), 500
 
+
 @gateway_service.route('/get_suggestion', methods=['GET'])
 def get_suggestion():
     try:
@@ -101,6 +110,7 @@ def get_suggestion():
             return jsonify({'error': 'No suggestions found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 # User Registration Endpoint
 @gateway_service.route('/register-user', methods=['POST'])
@@ -120,6 +130,7 @@ def register():
     except Exception as e:
         logger.error(f"exception when trying to register {e}")
         return jsonify({'error': str(e)}), 500
+
 
 # Login Endpoint
 @gateway_service.route('/login', methods=['POST'])
@@ -152,6 +163,7 @@ def login():
 
 TESTING_API_URL = 'http://127.0.0.1:5010'
 
+
 @gateway_service.route('/admin-test', methods=['GET'])
 def backend_test():
     try:
@@ -176,8 +188,6 @@ def backend_test():
     except Exception as e:
         logger.error(f"Test failed: {e} exception")
         return jsonify({'error': str(e)}), 500
-
-
 
 
 if __name__ == '__main__':
