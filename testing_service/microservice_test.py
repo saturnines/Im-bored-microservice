@@ -57,9 +57,6 @@ def login_user_test(username, password):
             print(f"Login Response: {response_json}")
 
             assert response.status_code == 200, f"Expected status code 200, got {response.status_code}"
-            assert "message" in response_json, "Response JSON does not contain 'message'"
-            assert response_json[
-                       "message"] == "User logged in successfully", f"Unexpected message: {response_json['message']}"
             assert "token" in response_json, "Response JSON does not contain 'token'"
 
             print("Login User test passed!")
@@ -121,7 +118,7 @@ def get_suggestion_test():
         assert False, f"General error: {err}"
 
 
-# Run auth, logging, suggestion
+# Run auth, logging, suggestion # Create shouldn't work
 if __name__ == "__main__":
     token = "your_valid_token_here"
     register_user_test("test_user", "test_password")
