@@ -1,0 +1,7 @@
+Flask==3.0.3
+fluent==0.10.0
+psycopg2==2.9.9
+PyJWT==2.8.0
+python-dotenv==1.0.1
+python_bcrypt==0.3.2
+Requests==2.32.3
