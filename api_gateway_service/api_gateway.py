@@ -190,5 +190,6 @@ def backend_test():
         return jsonify({'error': str(e)}), 500
 
 
+
 if __name__ == '__main__':
     gateway_service.run(debug=True, port=5000)

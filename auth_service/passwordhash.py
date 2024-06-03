@@ -7,6 +7,8 @@ def hash_password(password):
     hashed = bcrypt.hashpw(password.encode('utf-8'), salted_pw)
     return hashed
 
+
 def verify_password(stored_password, provided_password):
     """Check password"""
     return bcrypt.checkpw(provided_password.encode('utf-8'), stored_password)
+

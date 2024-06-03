@@ -4,7 +4,8 @@ import os
 #Logging imports
 
 from logging_service import logger_sender
-logger = logger_sender.configure_logging('crud_services',fluentd_host='fluentd', fluentd_port=24224)
+
+logger = logger_sender.configure_logging('crud_services', fluentd_host='fluentd', fluentd_port=24224)
 
 load_dotenv()
 DB_NAME = os.getenv('DB_NAME')
@@ -12,6 +13,7 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 DB_PORT = os.getenv('DB_PORT')
+
 
 def get_db_connection():
     """This connects to the DB."""
@@ -38,6 +40,7 @@ def create_entry(category, title, description):
     cur.close()
     conn.close()
 
+
 def delete_entry(category, title, description):
     """Deletes entry in the suggestions table."""
     conn = get_db_connection()
@@ -50,6 +53,7 @@ def delete_entry(category, title, description):
     conn.commit()
     cur.close()
     conn.close()
+
 
 def random_entry():
     """get random entry"""
