@@ -22,7 +22,7 @@ def table_connection():
     )
     return conn
 
-
+print("Hello from the Auth Service")
 
 def create_clients_table():
     """Creates a database for authenticating calls to suggestion-service api. """

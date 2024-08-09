@@ -1,5 +1,5 @@
 import bcrypt
-
+print("Hello from Hash")
 
 def hash_password(password):
     """Hash a password for use in user_auth"""

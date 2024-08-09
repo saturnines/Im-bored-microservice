@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 #Logging imports
 
+print("Hello from Logging Service")
 from logging_service import logger_sender
 
 logger = logger_sender.configure_logging('crud_services', fluentd_host='fluentd', fluentd_port=24224)

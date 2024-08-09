@@ -9,7 +9,7 @@ from auth_service import user_auth
 import bcrypt
 import os
 from dotenv import load_dotenv
-
+print("Hello from API Gateway service")
 
 
 #logging
