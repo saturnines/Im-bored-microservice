@@ -1,13 +1,15 @@
 # Microservices Project
 
 ## Overview
+This is a project I made to see how Microservices work for a future project. This is a proof of concept for myself.
 
 Currently, this project has 3 microservices:
 1. **User Authentication Service**: Manages user registration and login.
 2. **Suggestion Service**: Manages CRUD operations for suggestions.
-3. **API Gateway**: Routes requests to the appropriate microservice.
+3. **API Gateway**: Routes requests to the appropriate microservice. (RBAC Enabled.)
+4. **Logging Service**: Handles logging for each of the microservices. 
 
-## Communication Contract
+## Example Usages
 
 ### Register a New User
 
