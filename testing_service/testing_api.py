@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from microservice_test import register_user_test, login_user_test, create_entry_test, get_suggestion_test
 
 app = Flask(__name__)
-
+print("Hello from the Testing Service.")
 @app.route('/run-tests', methods=['GET'])
 def run_tests():
     results = {}
