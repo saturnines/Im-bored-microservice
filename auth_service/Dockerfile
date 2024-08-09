@@ -10,7 +10,7 @@ COPY . /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# environment variables
+# environment variables (Change if necessary)
 ENV DB_HOST=postgres
 ENV DB_PORT=5432
 ENV DB_USER=postgres

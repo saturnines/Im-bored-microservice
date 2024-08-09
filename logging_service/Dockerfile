@@ -6,3 +6,5 @@ RUN gem install fluent-plugin-elasticsearch --no-document
 #Install fluentd for logging use.
 
 USER fluent
+
+
