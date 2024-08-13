@@ -3,7 +3,7 @@
 ## Overview
 This is a project I made to see how Microservices work for a future project. 
 
-It includes services for API Gateway, Auth, Suggestions along  with elasticsearch and kibana for logging and visualization.
+It includes services for API Gateway, Auth, Suggestions along with Elasticsearch and Kibana for logging and visualization.
 
 Currently, this project has 4 microservices:
 1. **User Authentication Service**: Manages user registration and login.
@@ -11,7 +11,40 @@ Currently, this project has 4 microservices:
 3. **API Gateway**: Routes requests to the appropriate microservice. (RBAC Enabled.)
 4. **Logging Service**: Handles logging for each of the microservices. 
 
+## Docker Setup
 
+### Prerequisites
+- Docker
+- Docker Compose
+
+### Getting Started
+1. Clone the repository:
+   ```
+   git clone https://github.com/saturnines/Im-bored-microservice.git
+   ```
+
+2. Build and start the services:
+   ```
+   docker-compose up -d
+   ```
+
+3. Check if all services are running:
+   ```
+   docker-compose ps
+   ```
+
+### Accessing the Services
+- API Gateway: http://localhost:5000 (Do note you can't really access it you need to have a frontend to call the suggestions.)
+- Elasticsearch: http://localhost:9200
+- Kibana: http://localhost:5601
+
+### Stopping the Services
+To stop all services:
+```
+docker-compose down
+```
+
+## Usage Examples
 
 ### Register a New User
 
@@ -43,7 +76,6 @@ print(response.json())
 ```
 
 ### Creating Suggestions
-
 ```python
 import requests
 
@@ -79,7 +111,7 @@ response = requests.delete(f"{API_GATEWAY_URL}/delete_entry", json=data, headers
 print(response.json())
 ```
 
-###Getting Random Suggestion
+### Getting Random Suggestion
 ```python
 import requests
 
@@ -88,8 +120,7 @@ response = requests.get(f"{API_GATEWAY_URL}/get_suggestion")
 print(response.json())
 ```
 
-
-### Example Responses 
+## Example Responses 
 ```python
 Registering a new user...
 Raw Register Response: {
@@ -124,4 +155,12 @@ Raw Delete Suggestion Response: {
 
 Delete Suggestion Response: {'error': 'Access denied!'}
 ```
+
+## Troubleshooting
+If you encounter any issues:
+1. Ensure all required ports are free and not used by other applications.
+2. Check individual service logs for error messages.
+3. Try rebuilding the images: `docker-compose up -d --build`
+
+Due note this is just a proof of concept for a future project I'm working on. :)
 
