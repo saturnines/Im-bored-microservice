@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
-    environment:
+    environment:  # Change these
       - DB_HOST=db
       - DB_NAME=your_db_name
       - DB_USER=your_db_user
@@ -20,7 +20,7 @@ services:
 
   db:
     image: postgres:13
-    environment:
+    environment: # Change these.
       - POSTGRES_DB=your_db_name
       - POSTGRES_USER=your_db_user
       - POSTGRES_PASSWORD=your_db_password
