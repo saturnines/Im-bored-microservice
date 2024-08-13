@@ -23,12 +23,15 @@ Currently, this project has 4 microservices:
    git clone https://github.com/saturnines/Im-bored-microservice.git
    ```
 
-2. Build and start the services:
+2. Make sure to change env files in the docker_context_files dir.
+
+
+3. Build and start the services:
    ```
    docker-compose up -d
    ```
 
-3. Check if all services are running:
+4. Check if all services are running:
    ```
    docker-compose ps
    ```
