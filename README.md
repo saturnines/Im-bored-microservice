@@ -3,6 +3,8 @@
 ## Overview
 This is a project I made to see how Microservices work for a future project. This is a proof of concept for myself.
 
+This is a model to see how to "build" microservices, and use this as sort of an idea for future projects. 
+
 Currently, this project has 3 microservices:
 1. **User Authentication Service**: Manages user registration and login.
 2. **Suggestion Service**: Manages CRUD operations for suggestions.
