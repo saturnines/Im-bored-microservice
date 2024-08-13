@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  microservices:
+    build:
+      context: ./docker_context_files
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=your_db_name
+      - DB_USER=your_db_user
+      - DB_PASSWORD=your_db_password
+      - DB_PORT=5432
+      - SECRET_KEY=your_secret_key
+    depends_on:
+      - db
+      - fluentd
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=your_db_name
+      - POSTGRES_USER=your_db_user
+      - POSTGRES_PASSWORD=your_db_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  fluentd:
+    image: fluent/fluentd:v1.12
+    volumes:
+      - ./fluentd_config:/fluentd/etc
+    ports:
+      - "24224:24224"
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
+volumes:
+  postgres_data:
