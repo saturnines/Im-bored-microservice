@@ -10,6 +10,7 @@ Currently, this project has 4 microservices:
 2. **Suggestion Service**: Manages CRUD operations for suggestions.
 3. **API Gateway**: Routes requests to the appropriate microservice. (RBAC Enabled.)
 4. **Logging Service**: Handles logging for each of the microservices. 
+5. **Testing Service**: Just built this to try to intergrate with the other services. 
 
 ## Docker Setup
 
