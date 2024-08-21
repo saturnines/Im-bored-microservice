@@ -1,7 +1,6 @@
 import logging
 from fluent import sender
 
-print("Hello from logging Service")
 
 
 def configure_logging(service_name: str, fluentd_host: str = 'localhost', fluentd_port: int = 24224):
